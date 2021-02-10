@@ -8,6 +8,12 @@ external/gbsa/status
 external/slakos/origin
 external/slakos/status
 build
+_build
+bin
+_install
+lib
+lib64
+include
 custom.cmake
 __pycache__
 .idea

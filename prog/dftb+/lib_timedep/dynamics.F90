@@ -948,7 +948,7 @@ contains
     call getChargeDipole(this, deltaQ, qq, dipole, q0, trho, Ssqr, coord, iSquare, qBlock, qNetAtom)
     if (allocated(this%dispersion)) then
       call this%dispersion%updateOnsiteCharges(qNetAtom, orb, referenceN0,&
-          & this%speciesAll(:this%nAtom), .true.)
+          & this%speciesAll(:this%nAtom), .true., .false.)
     end if
 
     call updateH(this, H1, ham, over, ham0, this%speciesAll, qq, q0, coord, orb, potential,&
@@ -1057,7 +1057,7 @@ contains
           & qNetAtom)
       if (allocated(this%dispersion)) then
         call this%dispersion%updateOnsiteCharges(qNetAtom, orb, referenceN0,&
-            & this%speciesAll(:this%nAtom), .true.)
+            & this%speciesAll(:this%nAtom), .true., .false.)
       end if
 
       call updateH(this, H1, ham, over, ham0, this%speciesAll, qq, q0, coord, orb, potential,&

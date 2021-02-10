@@ -141,7 +141,7 @@ module dftbp_hsdparser
 
   !> Maximal record lenght on output in characters (bytes).
   !> If text nodes bigger than that occur runtime error can be expected.
-  integer, parameter :: MAXRECL = 1024 * 1024
+  integer, parameter :: MAXRECL = 4048 * 1024
 
 
   public :: parseHSD, dumpHSD, newline

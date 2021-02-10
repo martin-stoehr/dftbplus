@@ -16,7 +16,7 @@ module dftbp_dispmbd
   use dftbp_constants, only: symbolToNumber
   use dftbp_dispiface, only: TDispersionIface
   use dftbp_environment, only: TEnvironment
-  use dftbp_globalenv, only: stdOut
+  use dftbp_globalenv, only: stdOut, tIoProc
   use dftbp_periodic, only: TNeighbourList
   use dftbp_simplealgebra, only: determinant33
   use dftbp_typegeometry, only: TGeometry
@@ -299,7 +299,7 @@ contains
 
 
   !> Update charges in the MBD model
-  subroutine updateOnsiteCharges(this, qNetAtom, orb, referenceN0, species0, tCanUseCharges)
+  subroutine updateOnsiteCharges(this, qNetAtom, orb, referenceN0, species0, tCanUseCharges, tWriteCharges)
 
     !> Instance
     class(TDispMbd), intent(inout) :: this
@@ -319,6 +319,9 @@ contains
     !> Are these charges from a converged SCC calculation/are suitable to evaluate MBD from
     !> (i.e. non-converged but can be used)
     logical, intent(in) :: tCanUseCharges
+    
+    !> Should CPA ratios be printed?
+    logical, intent(in) :: tWriteCharges
 
     real(dp), allocatable :: cpa(:), free_charges(:)
     integer :: nAtom, i_atom, i_spec
@@ -345,6 +348,9 @@ contains
 
       ! charges have been updated though, so are available for property evaluations
       this%chargesUpdated = .true.
+      if (tIoProc .and. tWriteCharges) then
+        call writeCPAratios(cpa)
+      endif
     else
       this%chargesUpdated = .false.
     end if
@@ -390,6 +396,25 @@ contains
     write(stdOut, "(A,A)") '* Libmbd: ', str
 
   end subroutine mbdPrinter
+  
+  
+  !> Write CPA output
+  subroutine writeCPAratios(cpa)
+    use dftbp_fileid
+
+    real(dp), intent(in) :: cpa(:)
+    integer :: nAtom, iAtom, fIDcpa
+
+    nAtom = size(cpa)
+    fIDcpa = getFileId()
+    open(fIDcpa, file="CPA_ratios.out", action="write", status="replace", position="rewind")
+    write(fIDcpa,*) "       iAtom       CPA ratio"
+    do iAtom=1, nAtom
+        write(fIDcpa,*) iAtom, '  ', cpa(iAtom)
+    enddo
+    close(fIDcpa)
+
+  end subroutine writeCPAratios
 
 
 end module dftbp_dispmbd

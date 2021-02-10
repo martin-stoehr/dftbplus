@@ -9,7 +9,7 @@
 
 option(WITH_OMP "Whether OpenMP thread parallisation should be enabled" TRUE)
 
-option(WITH_MPI "Whether DFTB+ should support MPI-parallelism" FALSE)
+option(WITH_MPI "Whether DFTB+ should support MPI-parallelism" TRUE)
 # If you build an MPI-parallised binary, consider to set WITH_OMP (OpenMP thread parallelisaton) to
 # FALSE unless you want hybrid parallelisation (for experts only).
 
@@ -18,7 +18,7 @@ option(WITH_ELSI "Whether DFTB+ with MPI-parallelism should use the ELSI librari
 
 option(WITH_GPU "Whether DFTB+ should support GPU-acceleration via the MAGMA-library" FALSE)
 
-option(WITH_TRANSPORT "Whether transport via libNEGF should be included." FALSE)
+option(WITH_TRANSPORT "Whether transport via libNEGF should be included." TRUE)
 # Works only when building static libraries (see option BUILD_SHARED_LIBS)
 
 option(WITH_SOCKETS "Whether socket communication should be allowed for" FALSE)
@@ -26,11 +26,11 @@ option(WITH_SOCKETS "Whether socket communication should be allowed for" FALSE)
 option(WITH_ARPACK "Whether the ARPACK library should be included (needed for TD-DFTB)" FALSE)
 # Works only with non-MPI (serial) build, needed for Casida linear response
 
-option(WITH_DFTD3 "Whether the DFTD3 library should be included" FALSE)
+option(WITH_DFTD3 "Whether the DFTD3 library should be included" TRUE)
 # NOTE: Due to the license of the DFTD3 library, the combined code must be distributed under the
 # GPLv3 license (as opposed to the LGPLv3 license of the DFTB+ package)
 
-option(WITH_MBD "Whether DFTB+ should be built with many-body-dispersion support" FALSE)
+option(WITH_MBD "Whether DFTB+ should be built with many-body-dispersion support" TRUE)
 
 option(WITH_PLUMED "Whether metadynamics via the PLUMED2 library should be allowed for" FALSE)
 
