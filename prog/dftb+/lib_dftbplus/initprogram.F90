@@ -4499,10 +4499,14 @@ contains
     write(stdOut, "(A,T30,A)") "  Parameters", tmpStr
     select case (input%method)
     case ('ts')
-      write(tmpStr,"(E18.6)") input%ts_f_acc
-      write(stdOut, "(A,T30,A)") '  TSForceAccuracy', trim(adjustl(tmpStr))
-      write(tmpStr, "(E18.6)") input%ts_ene_acc
-      write(stdOut, "(A,T30,A)") '  TSEnergyAccuracy', trim(adjustl(tmpStr))
+      write(tmpStr, "(3(I3,1X))") input%k_grid
+      write(stdOut,"(A,T30,A)") "  vdW(TS) k-Grid", trim(adjustl(tmpStr))
+      write(tmpStr, "(3(F4.3,1X))") input%k_grid_shift
+      write(stdOut,"(A,T30,A)") "  vdW(TS) k-Grid shift", trim(adjustl(tmpStr))
+!      write(tmpStr,"(E18.6)") input%ts_f_acc
+!      write(stdOut, "(A,T30,A)") '  TSForceAccuracy', trim(adjustl(tmpStr))
+!      write(tmpStr, "(E18.6)") input%ts_ene_acc
+!      write(stdOut, "(A,T30,A)") '  TSEnergyAccuracy', trim(adjustl(tmpStr))
     case ('mbd-rsscs')
       write(tmpStr, "(3(I3,1X))") input%k_grid
       write(stdOut,"(A,T30,A)") "  MBD k-Grid", trim(adjustl(tmpStr))

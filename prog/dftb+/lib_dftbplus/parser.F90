@@ -4354,12 +4354,14 @@ contains
     type(fnode), pointer :: child
 
     input%method = 'ts'
-    call getChildValue(node, "EnergyAccuracy", input%ts_ene_acc, default=(input%ts_ene_acc),&
-        & modifier=buffer, child=child)
-    call convertByMul(char(buffer), energyUnits, child, input%ts_ene_acc)
-    call getChildValue(node, "ForceAccuracy", input%ts_f_acc, default=(input%ts_f_acc),&
-        & modifier=buffer, child=child)
-    call convertByMul(char(buffer), forceUnits, child, input%ts_f_acc)
+    call getChildValue(node, "KGrid", input%k_grid)
+    call getChildValue(node, "KGridShift", input%k_grid_shift, default=(input%k_grid_shift))
+!    call getChildValue(node, "EnergyAccuracy", input%ts_ene_acc, default=(input%ts_ene_acc),&
+!        & modifier=buffer, child=child)
+!    call convertByMul(char(buffer), energyUnits, child, input%ts_ene_acc)
+!    call getChildValue(node, "ForceAccuracy", input%ts_f_acc, default=(input%ts_f_acc),&
+!        & modifier=buffer, child=child)
+!    call convertByMul(char(buffer), forceUnits, child, input%ts_f_acc)
     call getChildValue(node, "Damping", input%ts_d, default=(input%ts_d))
     call getChildValue(node, "RangeSeparation", input%ts_sr, default=(input%ts_sr))
     call getChildValue(node, "ReferenceSet", buffer, 'ts', child=child)
