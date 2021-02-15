@@ -33,7 +33,7 @@ Hamiltonian = DFTB {
   }
 
   Dispersion = Ts {
-    KGrid = 1 1 1
+    KGrid = 2 2 2
     Damping = 20.0
     RangeSeparation = 1.0
   }

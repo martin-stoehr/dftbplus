@@ -30,7 +30,6 @@ Hamiltonian = DFTB {
     ReferenceSet = 'ts'
     NOmegaGrid = 15
     Beta = 1.05
-    KGrid = 2 2 2
   }
 }
 

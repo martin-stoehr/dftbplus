@@ -246,9 +246,7 @@ Testing DFTB+
 * After successful compilation, change to the build folder and execute the code
   tests::
 
-    pushd _build
-    ctest
-    popd
+    pushd _build; ctest -j; popd
 
   You can also run the tests in parallel in order to speed this up.  If you use
   parallel testing, ensure that the number of OpenMP threads is reduced

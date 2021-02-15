@@ -3735,14 +3735,14 @@ contains
     case ("ts")
   #:if WITH_MBD
       allocate(input%mbd)
-      call readDispTs(dispModel, input%mbd)
+      call readDispTs(dispModel, geo, input%mbd)
   #:else
       call detailedError(node, "Program must be compiled with the mbd library for TS-dispersion")
   #:endif
     case ("mbd")
   #:if WITH_MBD
       allocate(input%mbd)
-      call readDispMbd(dispModel, input%mbd)
+      call readDispMbd(dispModel, geo, input%mbd)
   #:else
       call detailedError(node, "Program must be compiled with the mbd library for MBD-dispersion")
   #:endif
@@ -4342,11 +4342,14 @@ contains
 #:if WITH_MBD
 
   !> Reads in settings for Tkatchenko-Scheffler dispersion
-  subroutine readDispTs(node, input)
+  subroutine readDispTs(node, geo, input)
 
     !> data to parse
     type(fnode), pointer, intent(in) :: node
 
+    !> geometry object, which contains atomic species information
+    type(TGeometry), intent(in) :: geo
+    
     !> control data coming back
     type(TDispMbdInp), intent(out) :: input
 
@@ -4354,16 +4357,12 @@ contains
     type(fnode), pointer :: child
 
     input%method = 'ts'
-    call getChildValue(node, "KGrid", input%k_grid)
-    call getChildValue(node, "KGridShift", input%k_grid_shift, default=(input%k_grid_shift))
-!    call getChildValue(node, "EnergyAccuracy", input%ts_ene_acc, default=(input%ts_ene_acc),&
-!        & modifier=buffer, child=child)
-!    call convertByMul(char(buffer), energyUnits, child, input%ts_ene_acc)
-!    call getChildValue(node, "ForceAccuracy", input%ts_f_acc, default=(input%ts_f_acc),&
-!        & modifier=buffer, child=child)
-!    call convertByMul(char(buffer), forceUnits, child, input%ts_f_acc)
+    if (geo%tPeriodic .or. geo%tHelical) then
+      call getChildValue(node, "KGrid", input%k_grid)
+      call getChildValue(node, "KGridShift", input%k_grid_shift, default=(input%k_grid_shift))
+    endif
     call getChildValue(node, "Damping", input%ts_d, default=(input%ts_d))
-    call getChildValue(node, "RangeSeparation", input%ts_sr, default=(input%ts_sr))
+    call getChildValue(node, "RangeSeparation", input%ts_sr)
     call getChildValue(node, "ReferenceSet", buffer, 'ts', child=child)
     input%vdw_params_kind = tolower(unquote(char(buffer)))
     call checkManyBodyDispRefName(input%vdw_params_kind, child)
@@ -4372,11 +4371,14 @@ contains
 
 
   !> Reads in many-body dispersion settings
-  subroutine readDispMbd(node, input)
+  subroutine readDispMbd(node, geo, input)
 
     !> data to parse
     type(fnode), pointer, intent(in) :: node
 
+    !> geometry object, which contains atomic species information
+    type(TGeometry), intent(in) :: geo
+    
     !> control data coming back
     type(TDispMbdInp), intent(out) :: input
 
@@ -4384,10 +4386,12 @@ contains
     type(fnode), pointer :: child
 
     input%method = 'mbd-rsscs'
-    call getChildValue(node, "Beta", input%mbd_beta, input%mbd_beta)
+    call getChildValue(node, "Beta", input%mbd_beta)
     call getChildValue(node, "NOmegaGrid", input%n_omega_grid, default=(input%n_omega_grid))
-    call getChildValue(node, "KGrid", input%k_grid)
-    call getChildValue(node, "KGridShift", input%k_grid_shift, default=(input%k_grid_shift))
+    if (geo%tPeriodic .or. geo%tHelical) then
+      call getChildValue(node, "KGrid", input%k_grid)
+      call getChildValue(node, "KGridShift", input%k_grid_shift, default=(input%k_grid_shift))
+    endif
     call getChildValue(node, "ReferenceSet", buffer, 'ts', child=child)
     input%vdw_params_kind = tolower(unquote(char(buffer)))
     call checkManyBodyDispRefName(input%vdw_params_kind, child)
